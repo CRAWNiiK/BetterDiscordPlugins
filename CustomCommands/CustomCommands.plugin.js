@@ -4,10 +4,10 @@
  * @description Create custom commands in chat with user-defined messages.
  * @author CRAWNiiK
  * @invite 9BHc5Wy7
- * @source https://github.com/CRAWNiiK/BetterDiscordCustomCommands/blob/main/CustomCommands.plugin.js
+ * @source https://github.com/CRAWNiiK/BetterDiscordPlugins/blob/main/CustomCommands/CustomCommands.plugin.js
  * @authorId 518240643156541470
  * @donate dogecoin:DC1sWvo3tZw9aLVjYweAqxQruKpMDC31go
- * @updateUrl https://raw.github.com/CRAWNiiK/BetterDiscordCustomCommands/blob/main/CustomCommands.plugin.js
+ * @updateUrl https://raw.github.com/CRAWNiiK/BetterDiscordPlugins/blob/main/CustomCommands/CustomCommands.plugin.js
  */
 
 const fs = require('fs');
