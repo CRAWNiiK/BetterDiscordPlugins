@@ -3,7 +3,7 @@
  * @author CRAWNiiK
  * @description Relaunches Discord with a button that only appears while in a voice call. Automatically clicks the "Reconnect" button if present after relaunching. Adds a hotkey (Ctrl+R) to trigger the relaunch.
  * @version 1.0.0
- * @source https://github.com/CRAWNiiK/BetterDiscordPlugins/blob/main/RelaunchAndReconnect.js
+ * @source https://github.com/CRAWNiiK/BetterDiscordPlugins/blob/main/RelaunchAndReconnect.plugin.js
  */
 
 module.exports = class RelaunchAndReconnect {
