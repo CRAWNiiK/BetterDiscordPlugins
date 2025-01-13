@@ -3,7 +3,7 @@
  * @author CRAWNiiK
  * @description Disconnects from a voice call before restarting Discord (manual trigger). Button only appears while in a voice call.
  * @version 1.0.0
- * @source https://github.com/CRAWNiiK/BetterDiscordPlugins
+ * @source https://github.com/CRAWNiiK/BetterDiscordPlugins/blob/main/DCAndRestartButton.plugin.js
  */
 
 module.exports = class AutoDisconnectOnRestart {
