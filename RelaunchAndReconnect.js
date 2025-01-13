@@ -1,7 +1,7 @@
 /**
- * @name RelaunchAndReconnect.plugin
+ * @name RelaunchAndReconnect
  * @author CRAWNiiK
- * @description Relaunches Discord with a button that only appears while in a voice call. Automatically clicks the "Reconnect" button if present after relaunching.
+ * @description Relaunches Discord with a button that only appears while in a voice call. Automatically clicks the "Reconnect" button if present after relaunching. Adds a hotkey (Ctrl+R) to trigger the relaunch.
  * @version 1.0.0
  * @source https://github.com/CRAWNiiK/BetterDiscordPlugins/blob/main/RelaunchAndReconnect.js
  */
@@ -19,7 +19,7 @@ module.exports = class RelaunchAndReconnect {
     }
 
     getDescription() {
-        return "Relaunches Discord with a button that only appears while in a voice call. Automatically clicks the 'Reconnect' button if present after relaunching.";
+        return "Relaunches Discord with a button that only appears while in a voice call. Automatically clicks the 'Reconnect' button if present after relaunching. Adds a hotkey (Ctrl+R) to trigger the relaunch.";
     }
 
     getVersion() {
@@ -53,6 +53,9 @@ module.exports = class RelaunchAndReconnect {
 
         // Automatically click the "Reconnect" button if present after Discord starts up
         this.autoReconnect();
+
+        // Add a hotkey listener for Ctrl+R
+        this.addHotkeyListener();
     }
 
     cleanup() {
@@ -67,6 +70,9 @@ module.exports = class RelaunchAndReconnect {
             clearInterval(this.interval);
             this.interval = null;
         }
+
+        // Remove the hotkey listener
+        this.removeHotkeyListener();
     }
 
     addButton() {
@@ -140,5 +146,25 @@ module.exports = class RelaunchAndReconnect {
 
         // Start observing the document for changes
         observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    addHotkeyListener() {
+        // Add a keydown event listener for Ctrl+R
+        this.hotkeyListener = (event) => {
+            if (event.ctrlKey && event.key === "r") {
+                event.preventDefault(); // Prevent the default browser reload behavior
+                this.handleRelaunch(); // Trigger the relaunch functionality
+            }
+        };
+
+        // Attach the event listener
+        document.addEventListener("keydown", this.hotkeyListener);
+    }
+
+    removeHotkeyListener() {
+        // Remove the keydown event listener
+        if (this.hotkeyListener) {
+            document.removeEventListener("keydown", this.hotkeyListener);
+        }
     }
 };
