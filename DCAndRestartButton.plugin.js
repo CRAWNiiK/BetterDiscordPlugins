@@ -1,5 +1,5 @@
 /**
- * @name RelaunchAndReconnect.plugin
+ * @name RelaunchAndReconnect
  * @author CRAWNiiK
  * @description Relaunches Discord with a button that only appears while in a voice call. Automatically clicks the "Reconnect" button if present after relaunching.
  * @version 1.0.0
