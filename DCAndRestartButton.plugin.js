@@ -1,12 +1,12 @@
 /**
- * @name DCAndRestartButton.plugin
+ * @name RelaunchAndReconnect.plugin
  * @author CRAWNiiK
- * @description Disconnects from a voice call before restarting Discord (manual trigger). Button only appears while in a voice call.
+ * @description Relaunches Discord with a button that only appears while in a voice call. Automatically clicks the "Reconnect" button if present after relaunching.
  * @version 1.0.0
- * @source https://github.com/CRAWNiiK/BetterDiscordPlugins/blob/main/DCAndRestartButton.plugin.js
+ * @source https://github.com/CRAWNiiK/BetterDiscordPlugins
  */
 
-module.exports = class AutoDisconnectOnRestart {
+module.exports = class RelaunchAndReconnect {
     constructor() {
         this.initialized = false;
         this.button = null;
@@ -15,11 +15,11 @@ module.exports = class AutoDisconnectOnRestart {
     }
 
     getName() {
-        return "AutoDisconnectOnRestart";
+        return "RelaunchAndReconnect";
     }
 
     getDescription() {
-        return "Disconnects from a voice call before restarting Discord (manual trigger). Button only appears while in a voice call.";
+        return "Relaunches Discord with a button that only appears while in a voice call. Automatically clicks the 'Reconnect' button if present after relaunching.";
     }
 
     getVersion() {
@@ -50,6 +50,9 @@ module.exports = class AutoDisconnectOnRestart {
 
         // Check voice call status periodically
         this.interval = setInterval(() => this.updateButtonVisibility(), 1000); // Check every second
+
+        // Automatically click the "Reconnect" button if present after Discord starts up
+        this.autoReconnect();
     }
 
     cleanup() {
@@ -69,7 +72,7 @@ module.exports = class AutoDisconnectOnRestart {
     addButton() {
         // Create a button in the Discord UI
         this.button = document.createElement("div");
-        this.button.textContent = "DC & Restart";
+        this.button.textContent = "Relaunch";
         this.button.style.position = "fixed";
         this.button.style.bottom = "20px";
         this.button.style.right = "20px";
@@ -80,7 +83,7 @@ module.exports = class AutoDisconnectOnRestart {
         this.button.style.cursor = "pointer";
         this.button.style.zIndex = "1000";
         this.button.style.display = "none"; // Hidden by default
-        this.button.addEventListener("click", () => this.handleRestart());
+        this.button.addEventListener("click", () => this.handleRelaunch());
 
         // Append the button to the body
         document.body.appendChild(this.button);
@@ -107,64 +110,35 @@ module.exports = class AutoDisconnectOnRestart {
         }
     }
 
-    handleRestart() {
-        const voiceChannelId = this.voiceModule?.getVoiceChannelId();
-
-        if (voiceChannelId) {
-            // Disconnect from the call and restart
-            this.disconnectFromVoice();
-        } else {
-            // If not in a call, restart immediately
-            this.restartDiscord();
-        }
+    handleRelaunch() {
+        // Relaunch Discord
+        this.relaunchDiscord();
     }
 
-    disconnectFromVoice() {
-        // Find the RTCManager module
-        const rtcManager = BdApi.findModuleByProps("getRTCConnection");
-        if (rtcManager) {
-            const connection = rtcManager.getRTCConnection();
-            if (connection) {
-                // Destroy the RTC connection
-                connection.destroy();
-
-                // Wait for the disconnect to complete
-                setTimeout(() => {
-                    // Restart Discord after disconnection
-                    this.restartDiscord();
-                }, 1000); // 1 second delay
-                return;
-            }
-        }
-
-        // If the RTCManager method fails, try the alternative method
-        this.alternativeDisconnect();
-    }
-
-    alternativeDisconnect() {
-        // Try an alternative method to disconnect from the voice call
-        const voiceDispatcher = BdApi.findModuleByProps("dispatch").dispatch;
-        if (voiceDispatcher) {
-            voiceDispatcher({
-                type: "VOICE_DISCONNECT",
-                context: "BetterDiscord"
-            });
-
-            // Wait for the disconnect to complete
-            setTimeout(() => {
-                // Restart Discord after disconnection
-                this.restartDiscord();
-            }, 1000); // 1 second delay
-        } else {
-            // If something goes wrong, restart anyway
-            this.restartDiscord();
-        }
-    }
-
-    restartDiscord() {
-        // Use DiscordNative.app.relaunch to restart Discord
+    relaunchDiscord() {
+        // Use DiscordNative.app.relaunch to relaunch Discord
         if (typeof DiscordNative !== "undefined" && DiscordNative.app.relaunch) {
             DiscordNative.app.relaunch();
         }
+    }
+
+    autoReconnect() {
+        // Wait for Discord to finish loading
+        const observer = new MutationObserver(() => {
+            // Check for the presence of the reconnect notice
+            const reconnectNotice = document.querySelector('.notice_be03aa.colorDefault_be03aa');
+            if (reconnectNotice) {
+                // Find the "Reconnect" button
+                const reconnectButton = reconnectNotice.querySelector('button.button_be03aa');
+                if (reconnectButton) {
+                    // Click the "Reconnect" button
+                    reconnectButton.click();
+                    console.log("Automatically clicked the 'Reconnect' button.");
+                }
+            }
+        });
+
+        // Start observing the document for changes
+        observer.observe(document.body, { childList: true, subtree: true });
     }
 };
