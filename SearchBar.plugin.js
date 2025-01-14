@@ -27,7 +27,7 @@ module.exports = class SearchBar {
   }
 
   getAuthor() {
-    return "YourName";
+    return "CRAWNiiK";
   }
 
   start() {
