@@ -92,8 +92,7 @@ module.exports = class SearchBar {
     toggleButton.style.height = "32px";
     toggleButton.style.borderRadius = "4px";
     toggleButton.style.backgroundColor = "transparent";
-    toggleButton.style.color = "#fff";
-    toggleButton.style.transition = "background-color 0.2s ease";
+    toggleButton.style.transition = "color 0.2s ease";
     toggleButton.style.position = "relative"; // Needed for absolute positioning of the search bar
 
     // Add the SVG icon for the magnifying glass
@@ -115,12 +114,15 @@ module.exports = class SearchBar {
       </svg>
     `;
 
-    // Hover effect for the toggle button
+    // Set the default color of the SVG to grey
+    toggleButton.style.color = "#b9bbbe"; // Discord's default grey color
+
+    // Change the SVG color to white on hover
     toggleButton.addEventListener("mouseenter", () => {
-      toggleButton.style.backgroundColor = "#4f545c";
+      toggleButton.style.color = "#fff"; // White on hover
     });
     toggleButton.addEventListener("mouseleave", () => {
-      toggleButton.style.backgroundColor = "transparent";
+      toggleButton.style.color = "#b9bbbe"; // Grey on mouse leave
     });
 
     // Create the Search Bar container
